@@ -1,0 +1,105 @@
+package edu.eci.arsw.quickmobility.controllers;
+
+
+import edu.eci.arsw.quickmobility.model.Carro;
+import edu.eci.arsw.quickmobility.model.DetallesUsuario;
+import edu.eci.arsw.quickmobility.model.Barrio;
+import edu.eci.arsw.quickmobility.model.Usuario;
+import edu.eci.arsw.quickmobility.services.QuickMobilityServices;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
+@RestController
+@RequestMapping("/quickmobility")
+public class QuickMobilityController extends BaseController{
+    @Autowired
+    QuickMobilityServices quickmobilityServices = null;
+
+
+    @RequestMapping("/helloworld")
+    public String helloWorld(){
+        return quickmobilityServices.helloWorld();
+    }
+
+    @RequestMapping(value ="/getCarros",method = RequestMethod.GET)
+    public ResponseEntity<?> getCarros(@PathVariable String username){
+        try{
+            DetallesUsuario user = getLoggedUser();
+            Collection<Carro> carrosCarroCollection = quickmobilityServices.getCarros(username);
+            return new ResponseEntity<>(carrosCarroCollection, HttpStatus.ACCEPTED);
+        }
+        catch (Exception e)
+        {
+            Logger.getLogger(QuickMobilityController.class.getName()).log(Level.SEVERE,null,e);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @RequestMapping(value="/addCarro", method= RequestMethod.POST)
+    public ResponseEntity<?> addCarroUsuario(@RequestBody Carro carro){
+        try{
+            DetallesUsuario usuario = getLoggedUser();
+            quickmobilityServices.addCarroUsuario(usuario,carro);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e){
+            Logger.getLogger(QuickMobilityController.class.getName()).log(Level.SEVERE, null, e);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @RequestMapping(value="/updateCarro/{carro}",method = RequestMethod.PUT)
+    public ResponseEntity<?> updateCarro(@PathVariable  Carro carro){
+        try{
+        	quickmobilityServices.updateCarro(carro);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            Logger.getLogger(QuickMobilityController.class.getName()).log(Level.SEVERE, null, e);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @RequestMapping(value ="/getBarrios",method = RequestMethod.GET)
+    public ResponseEntity<?> getBarrios(){
+        try{
+            List<Barrio> barriosCollection = quickmobilityServices.getBarrios();
+            return new ResponseEntity<>(barriosCollection,HttpStatus.ACCEPTED);
+
+        } catch (Exception e){
+            Logger.getLogger(QuickMobilityController.class.getName()).log(Level.SEVERE, null, e);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    @RequestMapping(value="/addBarrio", method=RequestMethod.POST)
+    public ResponseEntity<?> addBarrio(@RequestBody Barrio barrio){
+        try{
+        	quickmobilityServices.addBarrio(barrio);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e){
+            Logger.getLogger(QuickMobilityController.class.getName()).log(Level.SEVERE, null, e);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @RequestMapping(value="/addCalificacion/{idConductor}/{idPasajero}/{calificacion}", method=RequestMethod.POST)
+    public ResponseEntity<?> addCalificacion(@PathVariable String idConductor,@PathVariable String idPasajero,@PathVariable int calificacion){
+        try{
+        	quickmobilityServices.addCalificacion(idConductor,idPasajero,calificacion);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e){
+            Logger.getLogger(QuickMobilityController.class.getName()).log(Level.SEVERE, null, e);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+}

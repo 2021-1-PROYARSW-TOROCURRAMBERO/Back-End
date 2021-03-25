@@ -3,8 +3,9 @@ package edu.eci.arsw.quickmobility.persistence;
 import edu.eci.arsw.quickmobility.model.Carro;
 import edu.eci.arsw.quickmobility.model.Barrio;
 import edu.eci.arsw.quickmobility.model.Usuario;
-import edu.eci.arsw.quickmobility.repository.CarroRepository;
 import edu.eci.arsw.quickmobility.repository.UserRepository;
+import edu.eci.arsw.quickmobility.repository.CarroRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -83,7 +84,7 @@ public class ImplPersistencia implements QuickMobilityPersistence {
             //Connect with repository
         }
         else
-            throw new Exception(QuickMobilityException.INVALID_NEIGHBORHOOD);
+            throw new Exception(QuickMobilityException.INVALID_UNIVERSITY);
     }
 
     @Override
@@ -113,5 +114,13 @@ public class ImplPersistencia implements QuickMobilityPersistence {
         }
         else
             throw new Exception(QuickMobilityException.INVALID_CAR);
+    }
+
+
+    @Override
+    public void updateUser(Usuario user) throws QuickMobilityException {
+        Usuario oldUser = getUserByUsername(user.username);
+        oldUser.changeValues(user);
+        userRepository.save(oldUser);
     }
 }

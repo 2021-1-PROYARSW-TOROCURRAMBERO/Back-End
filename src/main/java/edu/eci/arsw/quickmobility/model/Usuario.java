@@ -16,7 +16,7 @@ public class Usuario {
     public String direccionResidencia;
     public String password;
     public String email;
-    public String barrio;
+    public String universidad;
     public String numero;
     public List<Carro> carros;
     public List<Conductor> viajesConductor;
@@ -25,13 +25,13 @@ public class Usuario {
     public Usuario(){}
 
     public Usuario(String username,String nombreCompleto,String password,String email,
-                   String barrio, String direccionResidencia, String numero, List<Carro> carros,
+                   String universidad, String direccionResidencia, String numero, List<Carro> carros,
                    List<Conductor> viajesConductor, List<Pasajero> viajesPasajero){
         this.username = username;
         this.nombreCompleto = nombreCompleto;
         this.password = password;
         this.email = email;
-        this.barrio = barrio;
+        this.universidad = universidad;
         this.direccionResidencia = direccionResidencia;
         this.numero = numero;
         this.carros = carros;
@@ -120,12 +120,23 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getBarrio() {
-        return barrio;
+    public String getUniversidad() {
+        return universidad;
     }
 
-    public void setBarrio(String barrio) {
-        this.barrio = barrio;
+    public void setUniversidad(String universidad) {
+        this.universidad = universidad;
+    }
+
+    public void changeValues(Usuario user){
+        this.viajesPasajero = user.viajesPasajero;
+        this.viajesConductor = user.viajesConductor;
+        this.carros = user.carros;
+        this.password = user.password;
+        this.direccionResidencia = user.direccionResidencia;
+        this.numero = user.numero;
+        this.email = user.email;
+        this.universidad = user.universidad;
     }
 
     @Override
@@ -137,7 +148,7 @@ public class Usuario {
                 ", direccionResidencia='" + direccionResidencia + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", barrio='" + barrio + '\'' +
+                ", universidad='" + universidad + '\'' +
                 ", numero='" + numero + '\'' +
                 ", carros=" + carros +
                 ", viajesConductor=" + viajesConductor +

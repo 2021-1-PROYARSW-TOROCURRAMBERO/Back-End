@@ -1,17 +1,11 @@
 package edu.eci.arsw.quickmobility.controllers;
 
-import edu.eci.arsw.quickmobility.model.DetallesUsuario;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-@Controller
-public abstract class BaseController {
-    protected DetallesUsuario getLoggedUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        DetallesUsuario userDetails = null;
-        if (principal instanceof DetallesUsuario) {
-            userDetails = (DetallesUsuario) principal;
-        }
-        return userDetails;
+import edu.eci.arsw.quickmobility.model.Usuario;
+
+public class BaseController {
+    public Usuario getCurrentUser(@AuthenticationPrincipal Usuario user) {
+        return user;
     }
 }

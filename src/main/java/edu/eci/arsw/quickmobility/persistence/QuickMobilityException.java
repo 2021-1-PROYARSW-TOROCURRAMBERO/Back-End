@@ -9,9 +9,9 @@ public class QuickMobilityException extends Exception {
 
     public final static String INVALID_RATING = "The value of rating is invalid";
 
-    public final static String NEIGHBORHOOD_NOT_FOUND = "The neighborhood selected is not available";
+    public final static String UNIVERSITY_NOT_FOUND = "The university selected is not available";
 
-    public final static String INVALID_NEIGHBORHOOD = "The neighborhood is invalid";
+    public final static String INVALID_UNIVERSITY = "The university is invalid";
 
     public final static String PASANGER_NOT_FOUND = "The passanger selected is not available";
 

@@ -1,11 +1,11 @@
 package edu.eci.arsw.quickmobility.persistence;
 
+import java.util.Collection;
+import java.util.List;
+
 import edu.eci.arsw.quickmobility.model.Carro;
 import edu.eci.arsw.quickmobility.model.Barrio;
 import edu.eci.arsw.quickmobility.model.Usuario;
-
-import java.util.Collection;
-import java.util.List;
 
 public interface QuickMobilityPersistence {
 
@@ -24,4 +24,6 @@ public interface QuickMobilityPersistence {
     void addCalificacion(String idConductor, String idPasajero, int calificacion) throws Exception;
 
     void updateCarro(Carro carro) throws Exception;
+
+    void updateUser(Usuario user) throws QuickMobilityException;
 }

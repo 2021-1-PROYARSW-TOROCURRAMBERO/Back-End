@@ -5,7 +5,9 @@ import edu.eci.arsw.quickmobility.model.Carro;
 import edu.eci.arsw.quickmobility.model.DetallesUsuario;
 import edu.eci.arsw.quickmobility.model.Barrio;
 import edu.eci.arsw.quickmobility.model.Usuario;
+import edu.eci.arsw.quickmobility.persistence.QuickMobilityException;
 import edu.eci.arsw.quickmobility.services.QuickMobilityServices;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +34,7 @@ public class QuickMobilityController extends BaseController{
     @RequestMapping(value ="/getCarros",method = RequestMethod.GET)
     public ResponseEntity<?> getCarros(@PathVariable String username){
         try{
-            DetallesUsuario user = getLoggedUser();
+
             Collection<Carro> carrosCarroCollection = quickmobilityServices.getCarros(username);
             return new ResponseEntity<>(carrosCarroCollection, HttpStatus.ACCEPTED);
         }
@@ -44,10 +46,11 @@ public class QuickMobilityController extends BaseController{
     }
 
 
-    @RequestMapping(value="/addCarro", method= RequestMethod.POST)
-    public ResponseEntity<?> addCarroUsuario(@RequestBody Carro carro){
+    @RequestMapping(value="/addCarro/{username}", method= RequestMethod.POST)
+    public ResponseEntity<?> addCarroUsuario(@RequestBody Carro carro,@PathVariable String username){
         try{
-            DetallesUsuario usuario = getLoggedUser();
+
+            Usuario usuario = getCurrentUser(quickmobilityServices.getUserByUsername(username));
             quickmobilityServices.addCarroUsuario(usuario,carro);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e){
@@ -70,8 +73,8 @@ public class QuickMobilityController extends BaseController{
     @RequestMapping(value ="/getBarrios",method = RequestMethod.GET)
     public ResponseEntity<?> getBarrios(){
         try{
-            List<Barrio> barriosCollection = quickmobilityServices.getBarrios();
-            return new ResponseEntity<>(barriosCollection,HttpStatus.ACCEPTED);
+            List<Barrio> barrioCollection = quickmobilityServices.getBarrios();
+            return new ResponseEntity<>(barrioCollection,HttpStatus.ACCEPTED);
 
         } catch (Exception e){
             Logger.getLogger(QuickMobilityController.class.getName()).log(Level.SEVERE, null, e);
@@ -99,6 +102,36 @@ public class QuickMobilityController extends BaseController{
         } catch (Exception e){
             Logger.getLogger(QuickMobilityController.class.getName()).log(Level.SEVERE, null, e);
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @RequestMapping(value="/getUserState/{username}",method = RequestMethod.GET)
+    public ResponseEntity<?> getUserState(@PathVariable String username){
+        try {
+            String state = quickmobilityServices.getUserState(username);
+            return new ResponseEntity<>(state,HttpStatus.OK);
+        } catch (QuickMobilityException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @RequestMapping(value="/getAverage/{username}/{type}",method=RequestMethod.GET)
+    public ResponseEntity<?> getAverage(@PathVariable String username,@PathVariable String type){
+        try {
+            float average = quickmobilityServices.getAverage(username,type);
+            return new ResponseEntity<>(average,HttpStatus.OK);
+        } catch (QuickMobilityException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value="/updateUser",method=RequestMethod.PUT)
+    public ResponseEntity<?> getAverage(@RequestBody Usuario usuario){
+        try {
+        	quickmobilityServices.updateUser(usuario);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (QuickMobilityException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

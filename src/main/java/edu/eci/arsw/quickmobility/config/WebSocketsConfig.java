@@ -11,7 +11,7 @@ public class WebSocketsConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/quickmobility");
+        config.enableSimpleBroker("/uniwheels");
         config.setApplicationDestinationPrefixes("/app");
     }
 

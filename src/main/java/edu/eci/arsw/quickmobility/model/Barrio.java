@@ -9,6 +9,8 @@ public class Barrio {
     private String id;
     private String nombre;
 
+    public Barrio() {}
+
     public Barrio(String nombre) {
         this.nombre = nombre;
     }

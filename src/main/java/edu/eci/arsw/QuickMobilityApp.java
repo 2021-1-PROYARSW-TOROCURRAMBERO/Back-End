@@ -8,12 +8,13 @@ import org.slf4j.LoggerFactory;
 
 
 @SpringBootApplication
-public class QuickMobility {
+public class QuickMobilityApp {
 
     public static void main(String[] args) {       
-        SpringApplication.run(QuickMobility.class, args);
+        SpringApplication.run(QuickMobilityApp.class, args);
        ((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger("org.mongodb.driver").setLevel(Level.WARN);
 
     }
 
 }
+

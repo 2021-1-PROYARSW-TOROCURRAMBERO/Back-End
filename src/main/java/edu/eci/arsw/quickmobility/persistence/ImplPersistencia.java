@@ -1,17 +1,19 @@
 package edu.eci.arsw.quickmobility.persistence;
 
 import edu.eci.arsw.quickmobility.model.Carro;
+import edu.eci.arsw.quickmobility.model.Conductor;
 import edu.eci.arsw.quickmobility.model.Barrio;
 import edu.eci.arsw.quickmobility.model.Usuario;
 import edu.eci.arsw.quickmobility.repository.UserRepository;
-import edu.eci.arsw.quickmobility.repository.CarroRepository;
+import edu.eci.arsw.quickmobility.model.*;
+import edu.eci.arsw.quickmobility.repository.NeighborhoodRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ImplPersistencia implements QuickMobilityPersistence {
@@ -23,7 +25,7 @@ public class ImplPersistencia implements QuickMobilityPersistence {
     private UserRepository userRepository;
 
     @Autowired
-    private CarroRepository carroRepository;
+    private NeighborhoodRepository neighborhoodRepository;
 
     @Override
     public void saveUser(Usuario usuario){
@@ -48,79 +50,77 @@ public class ImplPersistencia implements QuickMobilityPersistence {
         if(usuario == null){
             throw new QuickMobilityException(QuickMobilityException.USERNAME_NOT_FOUND);
         }
-
         return usuario;
     }
 
     @Override
-    public List<Carro> getCarros(String username) throws Exception {
-        if(username != null)
-        {
-            //Connect with repository
-        }
-        else
-            throw new Exception(QuickMobilityException.USERNAME_NOT_FOUND);
-        return null;
-    }
-
-    @Override
-    public void addCarroUsuario(Carro carro) throws Exception {
-        if(carro != null){
-            //Connect with repository
-        }
-        else
-            throw new Exception(QuickMobilityException.CAR_NOT_FOUND);
-
-    }
-
-    @Override
     public List<Barrio> getBarrio() {
-        return null;
+        List<Barrio> allNeighborhood = neighborhoodRepository.findAll();
+        return allNeighborhood;
     }
 
     @Override
     public void addBarrio(Barrio barrio) throws Exception {
         if(barrio != null){
-            //Connect with repository
+        	neighborhoodRepository.save(barrio);
+        } else {
+            throw new Exception(QuickMobilityException.INVALID_NEIGHBORHOOD);
         }
-        else
-            throw new Exception(QuickMobilityException.INVALID_UNIVERSITY);
     }
 
     @Override
     public void addCalificacion(String idConductor, String idPasajero, int calificacion) throws Exception {
-        if(calificacion > 0)
-        {
-            if(idPasajero != null)
-            {
+        if(calificacion > 0) {
+            if(idPasajero != null) {
                 if(idConductor != null){
                     //Connect with repository
+                } else {
+                    throw new Exception(QuickMobilityException.DRIVER_NOT_FOUND);
                 }
-                else
-                    throw  new Exception(QuickMobilityException.DRIVER_NOT_FOUND);
-            }
-            else
+            } else {
                 throw new Exception(QuickMobilityException.PASANGER_NOT_FOUND);
-        }
-        else
+            }
+        } else {
             throw new Exception(QuickMobilityException.INVALID_RATING);
+        }
     }
 
     @Override
-    public void updateCarro(Carro carro) throws Exception {
-        if(carro != null)
-        {
-            //Connect with repository
+    public void updateCarro(Carro carro, Usuario usuario) throws Exception {
+        if(carro != null) {
+           List<Carro> allCarros = usuario.getCarros();
+           for(Carro car: allCarros){
+               if(car.getPlaca().equals(carro.getPlaca())){
+                   car.setColor(carro.getColor());
+                   car.setMarca(carro.getMarca());
+                   car.setModelo(carro.getModelo());
+                   break;
+               }
+           }
+           userRepository.save(usuario);
+        } else {
+            throw new Exception (QuickMobilityException.INVALID_CAR);
         }
-        else
-            throw new Exception(QuickMobilityException.INVALID_CAR);
     }
-
 
     @Override
     public void updateUser(Usuario user) throws QuickMobilityException {
         Usuario oldUser = getUserByUsername(user.username);
         oldUser.changeValues(user);
         userRepository.save(oldUser);
+    }
+
+    @Override
+    public List<Conductor> getConductoresDisponibles(){
+        List<Usuario> usuarios= userRepository.findAll();
+        List<Conductor> conductorsTemp = new ArrayList<Conductor>();
+        for(Usuario user:usuarios){
+            for(Conductor con: user.getViajesConductor()){
+                if(con.getEstado().equals("Disponible")){
+                    conductorsTemp.add(con);
+                }
+            }
+        }
+        return conductorsTemp;
     }
 }

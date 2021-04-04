@@ -1,7 +1,5 @@
 package edu.eci.arsw.quickmobility.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -70,6 +68,10 @@ public class Usuario {
 
     public void setCarros(List<Carro> carros) {
         this.carros = carros;
+    }
+
+    public void addCarros(Carro carro) {
+        this.carros.add(carro);
     }
 
     public String getNumero() {

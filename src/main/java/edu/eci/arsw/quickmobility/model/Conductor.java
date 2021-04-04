@@ -1,20 +1,24 @@
 package edu.eci.arsw.quickmobility.model;
 
 import org.springframework.data.annotation.Id;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Conductor {
 
     @Id
     public String id;
-    public String precio, direccionInicio, direccionFin, horaInicio, horaFin,estado;
+    public String precio, direccionInicio, direccionFin, horaInicio, horaFin,estado,username;
     public Calificacion calificacion;
     public Carro carro;
+    public List<Pasajero> posiblesPasajeros;
 
     public Conductor() {
+        this.posiblesPasajeros = new ArrayList<>();
     }
 
     public Conductor(String id, String precio, String direccionInicio, String direccionFin,
-                     String horaInicio, String horaFin, String estado, Calificacion calificacion, Carro carro) {
+                     String horaInicio, String horaFin, String estado, Calificacion calificacion, Carro carro, List<Pasajero> posiblesPasajeros) {
         this.id = id;
         this.precio = precio;
         this.direccionInicio = direccionInicio;
@@ -23,7 +27,7 @@ public class Conductor {
         this.horaFin = horaFin;
         this.estado = estado;
         this.calificacion = calificacion;
-        this.carro = carro;
+        this.posiblesPasajeros = posiblesPasajeros;
     }
 
     public String getId() {
@@ -80,5 +84,37 @@ public class Conductor {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public Calificacion getCalificacion() {
+        return calificacion;
+    }
+
+    public void setCalificacion(Calificacion calificacion) {
+        this.calificacion = calificacion;
+    }
+
+    public Carro getCarro() {
+        return carro;
+    }
+
+    public void setCarro(Carro carro) {
+        this.carro = carro;
+    }
+
+    public List<Pasajero> getPosiblesPasajeros() {
+        return posiblesPasajeros;
+    }
+
+    public void setPosiblesPasajeros(List<Pasajero> posiblesPasajeros) {
+        this.posiblesPasajeros = posiblesPasajeros;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

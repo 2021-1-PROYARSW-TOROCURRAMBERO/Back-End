@@ -10,11 +10,16 @@ public class Carro {
     public String color;
     public String modelo;
 
-    public Carro(){
-
-    }
+    public Carro(){}
 
     public Carro(String placa, String marca, String color, String modelo){
+        this.placa = placa;
+        this.marca = marca;
+        this.color = color;
+        this.modelo = modelo;
+    }
+    public Carro(String id, String placa, String marca, String color, String modelo){
+        this.id = id;
         this.placa = placa;
         this.marca = marca;
         this.color = color;

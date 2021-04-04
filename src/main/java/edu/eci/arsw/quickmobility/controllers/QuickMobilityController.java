@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/quickmobility")
+@CrossOrigin(origins = "*")
 public class QuickMobilityController extends BaseController{
     @Autowired
     QuickMobilityServices quickmobilityServices = null;
@@ -31,15 +32,13 @@ public class QuickMobilityController extends BaseController{
         return quickmobilityServices.helloWorld();
     }
 
-    @RequestMapping(value ="/getCarros",method = RequestMethod.GET)
+    @RequestMapping(value ="/getCarros/{username}",method = RequestMethod.GET)
     public ResponseEntity<?> getCarros(@PathVariable String username){
         try{
-
             Collection<Carro> carrosCarroCollection = quickmobilityServices.getCarros(username);
             return new ResponseEntity<>(carrosCarroCollection, HttpStatus.ACCEPTED);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Logger.getLogger(QuickMobilityController.class.getName()).log(Level.SEVERE,null,e);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -49,9 +48,7 @@ public class QuickMobilityController extends BaseController{
     @RequestMapping(value="/addCarro/{username}", method= RequestMethod.POST)
     public ResponseEntity<?> addCarroUsuario(@RequestBody Carro carro,@PathVariable String username){
         try{
-
-            Usuario usuario = getCurrentUser(quickmobilityServices.getUserByUsername(username));
-            quickmobilityServices.addCarroUsuario(usuario,carro);
+        	quickmobilityServices.addCarroUsuario(username,carro);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e){
             Logger.getLogger(QuickMobilityController.class.getName()).log(Level.SEVERE, null, e);
@@ -59,10 +56,11 @@ public class QuickMobilityController extends BaseController{
         }
     }
 
-    @RequestMapping(value="/updateCarro/{carro}",method = RequestMethod.PUT)
-    public ResponseEntity<?> updateCarro(@PathVariable  Carro carro){
+    @RequestMapping(value="/updateCarro/{username}",method = RequestMethod.PUT)
+    public ResponseEntity<?> updateCarro(@RequestBody Carro carro,@PathVariable String username){
         try{
-        	quickmobilityServices.updateCarro(carro);
+            Usuario usuario = getCurrentUser(quickmobilityServices.getUserByUsername(username));
+            quickmobilityServices.updateCarro(carro,usuario);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             Logger.getLogger(QuickMobilityController.class.getName()).log(Level.SEVERE, null, e);
@@ -86,7 +84,8 @@ public class QuickMobilityController extends BaseController{
     @RequestMapping(value="/addBarrio", method=RequestMethod.POST)
     public ResponseEntity<?> addBarrio(@RequestBody Barrio barrio){
         try{
-        	quickmobilityServices.addBarrio(barrio);
+            System.out.println("w");
+            quickmobilityServices.addBarrio(barrio);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e){
             Logger.getLogger(QuickMobilityController.class.getName()).log(Level.SEVERE, null, e);
@@ -105,10 +104,10 @@ public class QuickMobilityController extends BaseController{
         }
     }
 
-    @RequestMapping(value="/getUserState/{username}",method = RequestMethod.GET)
+    @RequestMapping(value="/userStatus/{username}",method = RequestMethod.GET)
     public ResponseEntity<?> getUserState(@PathVariable String username){
         try {
-            String state = quickmobilityServices.getUserState(username);
+            String state = quickmobilityServices.getUserStatus(username);
             return new ResponseEntity<>(state,HttpStatus.OK);
         } catch (QuickMobilityException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);

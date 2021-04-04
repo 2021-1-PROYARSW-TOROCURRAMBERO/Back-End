@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "*")
 public class AuthQuickMobilityController extends BaseController{
     @Autowired
     private AuthServices authServices;

@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 public class Pasajero {
     @Id
     public String id;
+    public String username;
     public String direccionRecogida;
     public String estado;
     public Conductor conductor;
@@ -51,5 +52,21 @@ public class Pasajero {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Calificacion getCalificacion() {
+        return calificacion;
+    }
+
+    public void setCalificacion(Calificacion calificacion) {
+        this.calificacion = calificacion;
     }
 }

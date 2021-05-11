@@ -14,7 +14,7 @@ public class Usuario {
     public String direccionResidencia;
     public String password;
     public String email;
-    public String universidad;
+    public String barrio;
     public String numero;
     public List<Carro> carros;
     public List<Conductor> viajesConductor;
@@ -23,13 +23,13 @@ public class Usuario {
     public Usuario(){}
 
     public Usuario(String username,String nombreCompleto,String password,String email,
-                   String universidad, String direccionResidencia, String numero, List<Carro> carros,
+                   String barrio, String direccionResidencia, String numero, List<Carro> carros,
                    List<Conductor> viajesConductor, List<Pasajero> viajesPasajero){
         this.username = username;
         this.nombreCompleto = nombreCompleto;
         this.password = password;
         this.email = email;
-        this.universidad = universidad;
+        this.barrio = barrio;
         this.direccionResidencia = direccionResidencia;
         this.numero = numero;
         this.carros = carros;
@@ -64,6 +64,17 @@ public class Usuario {
 
     public List<Carro> getCarros() {
         return carros;
+    }
+
+    public void setCarro(Carro car) {
+        for(Carro carTemp : getCarros()){
+            if(carTemp.getPlaca().equals(car.getPlaca())){
+                carTemp.setColor(car.getColor());
+                carTemp.setMarca(car.getMarca());
+                carTemp.setModelo(car.getModelo());
+                break;
+            }
+        }
     }
 
     public void setCarros(List<Carro> carros) {
@@ -122,12 +133,12 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getUniversidad() {
-        return universidad;
+    public String getBarrio() {
+        return barrio;
     }
 
-    public void setUniversidad(String universidad) {
-        this.universidad = universidad;
+    public void setBarrio(String barrio) {
+        this.barrio = barrio;
     }
 
     public void changeValues(Usuario user){
@@ -138,7 +149,7 @@ public class Usuario {
         this.direccionResidencia = user.direccionResidencia;
         this.numero = user.numero;
         this.email = user.email;
-        this.universidad = user.universidad;
+        this.barrio = user.barrio;
     }
 
     @Override
@@ -150,7 +161,7 @@ public class Usuario {
                 ", direccionResidencia='" + direccionResidencia + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", universidad='" + universidad + '\'' +
+                ", barrio='" + barrio + '\'' +
                 ", numero='" + numero + '\'' +
                 ", carros=" + carros +
                 ", viajesConductor=" + viajesConductor +

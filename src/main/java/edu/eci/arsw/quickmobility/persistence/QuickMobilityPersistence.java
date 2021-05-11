@@ -4,10 +4,9 @@ import edu.eci.arsw.quickmobility.model.Carro;
 import edu.eci.arsw.quickmobility.model.Conductor;
 import edu.eci.arsw.quickmobility.model.Barrio;
 import edu.eci.arsw.quickmobility.model.Usuario;
-
 import java.util.List;
 
-public interface QuickMobilityPersistence {
+public interface QuickmobilityPersistence {
 
     void saveUser(Usuario usuario);
 
@@ -17,7 +16,7 @@ public interface QuickMobilityPersistence {
 
     void addBarrio(Barrio barrio) throws Exception;
 
-    void addCalificacion(String idConductor, String idPasajero, int calificacion) throws Exception;
+    void addCalificacion(String idConductor, String idPasajero, double calificacion) throws QuickMobilityException;
 
     void updateCarro(Carro carro,Usuario usuario) throws Exception;
 

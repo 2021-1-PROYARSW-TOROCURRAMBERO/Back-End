@@ -3,9 +3,8 @@ package edu.eci.arsw.quickmobility.services;
 
 import edu.eci.arsw.quickmobility.model.DetallesUsuario;
 import edu.eci.arsw.quickmobility.model.Usuario;
-import edu.eci.arsw.quickmobility.persistence.QuickMobilityException;
 import edu.eci.arsw.quickmobility.persistence.ImplPersistencia;
-
+import edu.eci.arsw.quickmobility.persistence.QuickMobilityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,6 +26,7 @@ public class AuthServices extends UserServices{
 
         quickmobilityPersistence.saveUser(usuario);
     }
+
 
 
     public boolean login(String username,String password) throws QuickMobilityException {

@@ -12,13 +12,12 @@ public class WebSocketsConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/quickmobility");
-        config.setApplicationDestinationPrefixes("/app");
+        config.setApplicationDestinationPrefixes("/wss");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/stompendpoint").setAllowedOrigins("*").withSockJS();
-        registry.addEndpoint("/ofrecerViaje").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/wss").setAllowedOrigins("*").withSockJS();
 
     }
 

@@ -1,24 +1,20 @@
 package edu.eci.arsw.quickmobility.sockets;
 
+import edu.eci.arsw.quickmobility.model.*;
+import edu.eci.arsw.quickmobility.persistence.QuickMobilityException;
+import edu.eci.arsw.quickmobility.services.QuickMobilityServices;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.security.core.Authentication;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import edu.eci.arsw.quickmobility.model.Conductor;
-import edu.eci.arsw.quickmobility.model.Pasajero;
-import edu.eci.arsw.quickmobility.persistence.QuickMobilityException;
-import edu.eci.arsw.quickmobility.services.QuickMobilityServices;
-import edu.eci.arsw.quickmobility.model.*;
-
-import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequestMapping("/ws")
 public class WebSocketController {
 
     @Autowired
@@ -27,41 +23,63 @@ public class WebSocketController {
     @Autowired
     QuickMobilityServices quickmobilityServices;
 
-
-    @MessageMapping("/solicitudPasajero.{usernameConductor}")
-    public void pasajeroSolicitudDeViaje(String infoPasajero, @DestinationVariable String usernameConductor){
-        JSONObject infoDelPasajero = new JSONObject(infoPasajero);
+    @MessageMapping("/passengerRequest.{usernameDriver}")
+    public void pasajeroSolicitudDeViaje(InformacionPasajero infoPassenger, @DestinationVariable String usernameDriver){
         try {
-            List<Pasajero> posiblesPasajeros= quickmobilityServices.solicitudDeViajePasajero(infoDelPasajero,usernameConductor);
-            msgt.convertAndSend("/solicitudPasajero."+usernameConductor,posiblesPasajeros);
+            List<Pasajero> possiblePassengers= quickmobilityServices.solicitudDeViajePasajero(infoPassenger,usernameDriver);
+            msgt.convertAndSend("/quickmobility/passengerRequest."+usernameDriver,possiblePassengers);
         } catch (QuickMobilityException e) {
             e.printStackTrace();
-            msgt.convertAndSend("/solicitudPasajero."+usernameConductor,"No encontré el usuario pasajero o el conductor");
+            msgt.convertAndSend("/quickmobility/passengerRequest."+usernameDriver,"No encontré el usuario pasajero o el conductor");
         }
     }
 
-    @MessageMapping("/ofrecerViaje/{conducNombre}")
-    public void ofrecerViaje(String ruta, @DestinationVariable String conducNombre ) throws QuickMobilityException {
-        JSONObject infoConductor = new JSONObject(ruta);
+    @MessageMapping("/offerTravel.{driverUsername}")
+    public void ofrecerViaje(Viaje travel, @DestinationVariable String driverUsername ) throws QuickMobilityException {
+        boolean hasRoute = true;
+        if(travel.getPrecio() == null){
+            msgt.convertAndSend("/quickmobility/drivers",quickmobilityServices.getConductoresDisponibles());
+            hasRoute = false;
+        }
         try {
-            List<Conductor> conductoresDisponibles = quickmobilityServices.getConductoresDisponibles(infoConductor,conducNombre);
-            msgt.convertAndSend("/uniwheels",conductoresDisponibles);
+            if(hasRoute) {
+                List<Conductor> availableDrivers = quickmobilityServices.getConductoresDisponibles(travel, driverUsername);
+                msgt.convertAndSend("/quickmobility/drivers", availableDrivers);
+            }
         } catch (QuickMobilityException e) {
             e.printStackTrace();
-            msgt.convertAndSend("/uniwheels","No se encontraron conductores disponibles");
+            msgt.convertAndSend("/quickmobility/drivers",e.getMessage());
         }
     }
 
-    @MessageMapping("/aceptarORechazarPasajero.{usernamePasajero}")
-    public void aceptarORechazarPasajero(String estado,@DestinationVariable String usernamePasajero){
-        JSONObject estadoJSON = new JSONObject(estado);
+    @MessageMapping("/acceptOrRejectPassenger.{usernamePassenger}")
+    public void aceptarORechazarPasajero(NuevoEstado state, @DestinationVariable String usernamePassenger){
         try{
-            JSONObject json = quickmobilityServices.aceptarORechazarPasajero(estadoJSON,usernamePasajero);
-
-            msgt.convertAndSend("/aceptarORechazarPasajero.{usernamePasajero}",json.toMap());
+            JSONObject json = quickmobilityServices.aceptarORechazarPasajero(state,usernamePassenger);
+            msgt.convertAndSend("/quickmobility/acceptOrRejectPassenger."+usernamePassenger,json.toMap());
         } catch (Exception e){
-            msgt.convertAndSend("/aceptarORechazarPasajero.{usernamePasajero}","No se encontró un pasajero o conductor con el username dado");
+            msgt.convertAndSend("/quickmobility/acceptOrRejectPassenger."+usernamePassenger,"No se encontró un pasajero o conductor con el username dado");
         }
 
+    }
+
+    @MessageMapping("/passengerState.{usernamePassenger}")
+    public void estadoPasajero(Estado state, @DestinationVariable String usernamePassenger){
+        try {
+            msgt.convertAndSend("/quickmobility/passengerState."+usernamePassenger,quickmobilityServices.estadoPasajero(state,usernamePassenger));
+        } catch (QuickMobilityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @MessageMapping("/finishTravel.{useranameDriver}")
+    public void finishTravel(List<Pasajero> passengers,@DestinationVariable String usernameDriver){
+        try {
+        	quickmobilityServices.finishTravel(usernameDriver,passengers);
+            msgt.convertAndSend("/finishTravel."+usernameDriver,"The travel is finished");
+        } catch (QuickMobilityException e) {
+            msgt.convertAndSend("/finishTravel."+usernameDriver,"I got a error: "+e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

@@ -7,7 +7,7 @@ public class Pasajero {
     public String id;
     public String username;
     public String direccionRecogida;
-    public String estado;
+    public Estado estado;
     public Conductor conductor;
     public Calificacion calificacion;
 
@@ -15,7 +15,7 @@ public class Pasajero {
 
     }
 
-    public Pasajero(String direccionRecogida, String estado, Conductor conductor, Calificacion calificacion){
+    public Pasajero(String direccionRecogida, Estado estado, Conductor conductor, Calificacion calificacion){
         this.direccionRecogida = direccionRecogida;
         this.estado = estado;
         this.conductor = conductor;
@@ -46,11 +46,11 @@ public class Pasajero {
         this.direccionRecogida = direccionRecogida;
     }
 
-    public String getEstado() {
+    public Estado getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(Estado estado) {
         this.estado = estado;
     }
 
@@ -68,5 +68,17 @@ public class Pasajero {
 
     public void setCalificacion(Calificacion calificacion) {
         this.calificacion = calificacion;
+    }
+
+    @Override
+    public String toString() {
+        return "Pasajero{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", direccionRecogida='" + direccionRecogida + '\'' +
+                ", estado=" + estado +
+                ", conductor=" + conductor +
+                ", calificacion=" + calificacion +
+                '}';
     }
 }

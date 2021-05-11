@@ -1,7 +1,7 @@
 package edu.eci.arsw.quickmobility.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
 import edu.eci.arsw.quickmobility.model.Barrio;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface NeighborhoodRepository extends MongoRepository<Barrio,String> {
 }

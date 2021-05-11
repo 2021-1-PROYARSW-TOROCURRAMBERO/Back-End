@@ -2,7 +2,7 @@ package edu.eci.arsw.quickmobility.services;
 
 import edu.eci.arsw.quickmobility.model.*;
 import edu.eci.arsw.quickmobility.persistence.QuickMobilityException;
-import edu.eci.arsw.quickmobility.persistence.QuickmobilityPersistence;
+import edu.eci.arsw.quickmobility.persistence.QuickMobilityPersistence;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.ConditionalOperators;
@@ -19,7 +19,7 @@ public class QuickMobilityServices extends UserServices {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
-	QuickmobilityPersistence quickmobilityPersistence;
+	QuickMobilityPersistence quickmobilityPersistence;
 
 	public String helloWorld() {
 		return "Hello World Hola Mundo";

@@ -6,7 +6,7 @@ import edu.eci.arsw.quickmobility.model.Barrio;
 import edu.eci.arsw.quickmobility.model.Usuario;
 import java.util.List;
 
-public interface QuickmobilityPersistence {
+public interface QuickMobilityPersistence {
 
     void saveUser(Usuario usuario);
 

@@ -3,12 +3,12 @@ package edu.eci.arsw.quickmobility.services;
 import edu.eci.arsw.quickmobility.model.Usuario;
 import edu.eci.arsw.quickmobility.persistence.ImplPersistencia;
 import edu.eci.arsw.quickmobility.persistence.QuickMobilityException;
-import edu.eci.arsw.quickmobility.persistence.QuickmobilityPersistence;
+import edu.eci.arsw.quickmobility.persistence.QuickMobilityPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserServices {
     @Autowired
-    QuickmobilityPersistence quickmobilityPersistence;
+    QuickMobilityPersistence quickmobilityPersistence;
     public Usuario getUserByUsername(String username) throws QuickMobilityException {
         return quickmobilityPersistence.getUserByUsername(username);
     }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ImplPersistencia implements QuickmobilityPersistence {
+public class ImplPersistencia implements QuickMobilityPersistence {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;

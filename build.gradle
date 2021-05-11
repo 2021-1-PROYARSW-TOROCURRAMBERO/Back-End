@@ -1,4 +1,4 @@
-group 'edu.eci.ieti'
+group 'edu.eci.arsw'
 
 
 buildscript {
